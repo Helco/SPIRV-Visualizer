@@ -71,12 +71,20 @@ function dropHandler(event) {
         // DataTransfer interface
         file = event.dataTransfer.files[0];
     }
-    const reader = new FileReader();
-    reader.onload = function() {
-        filename = (file) ? file.name : undefined;
-        fileSelected(reader.result, filename);
-    };
-    reader.readAsArrayBuffer(file);
+    
+    function loadFile() {
+        const reader = new FileReader();
+        reader.onload = function() {
+            filename = (file) ? file.name : undefined;
+            fileSelected(reader.result, filename);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+    
+    loadFile();
+    if (document.getElementById("liveUpdate").checked)
+        setInterval(loadFile, 5000);
+        
 }
 const dropArea = document.getElementsByTagName("BODY")[0];
 dropArea.addEventListener('drop', dropHandler, false);
